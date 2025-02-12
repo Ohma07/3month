@@ -1,7 +1,7 @@
 # quiz.py
-from aiogram import types, Dispatcher
+from aiogram import types, Dispatcher, executor
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from config import bot
+from config import bot, dp
 
 
 async def quiz(message: types.Message):

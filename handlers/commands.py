@@ -22,18 +22,18 @@ async def mem_handler(message: types.Message):
                              photo=photo)
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    text = message.text.lower()
-
-    if "game" in text:
-        games_list = ['⚽', '🎰', '🏀', '🎯', '🎳', '🎲']
-        chosen_game = random.choice(games_list)
-        await message.answer(f"Игральная кость выбрана: {chosen_game}")
-        await bot.send_dice(message.chat.id, emoji=chosen_game)
-    else:
-        await message.reply(f"Вы написали: {message.text}")
-
+# @dp.message_handler()
+# async def echo(message: types.Message):
+#     text = message.text.lower()
+#
+#     if "game" in text:
+#         games_list = ['⚽', '🎰', '🏀', '🎯', '🎳', '🎲']
+#         chosen_game = random.choice(games_list)
+#         await message.answer(f"Игральная кость выбрана: {chosen_game}")
+#         await bot.send_dice(message.chat.id, emoji=chosen_game)
+#     else:
+#         await message.reply(f"Вы написали: {message.text}")
+#
 
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
