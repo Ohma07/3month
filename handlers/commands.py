@@ -2,6 +2,7 @@
 from aiogram import types, Dispatcher, executor
 from config import bot,dp
 import random
+import buttons
 
 
 
@@ -9,7 +10,7 @@ async def start_hanler(message: types.Message):
     print('Обработчик старта')
     await bot.send_message(chat_id=message.from_user.id,
                            text=f'Hello {message.from_user.first_name}\n'
-                                f'Твой Telegram ID - {message.from_user.id}\n')
+                                f'Твой Telegram ID - {message.from_user.id}\n', reply_markup=buttons.start)
 
     await message.answer('Привет мир')
 

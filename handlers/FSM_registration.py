@@ -3,175 +3,195 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
+import buttons
+from db import main_db
 
-# class FSM_reg(StatesGroup):
-#     fullname = State()
-#     age = State()
-#     gender = State()
-#     date_age = State()
-#     email = State()
-#     photo = State()
-#     submit = State()
-#
-#
-# async def start_fsm_reg(message: types.Message):
-#     await FSM_reg.fullname.set()
-#     await message.answer('Введите своё фио: ')
-#
-#
-# async def load_fullname(message: types.Message, state: FSMContext):
-#     async with state.proxy() as data:
-#         data['fullname'] = message.text
-#
-#     await FSM_reg.next()
-#     await message.answer('Отправь свой возраст')
-#
-#
-# async def load_age(message: types.Message, state: FSMContext):
-#     async with state.proxy() as data:
-#         data['age'] = message.text
-#
-#     await FSM_reg.next()
-#     await message.answer('Укажите пол')
-#
-#
-#
-# async def load_gender(message: types.Message, state: FSMContext):
-#     async with state.proxy() as data:
-#         data['gender'] = message.text
-#
-#
-#     await FSM_reg.next()
-#     await message.answer('Укажите дату рождения:')
-#
-#
-# async def load_date_age(message: types.Message, state: FSMContext):
-#     async with state.proxy() as data:
-#         data['date_age'] = message.text
-#
-#
-#     await FSM_reg.next()
-#     await message.answer('Укажите свою почту')
-#
-#
-# async def load_email(message: types.Message, state: FSMContext):
-#     async with state.proxy() as data:
-#         data['email'] = message.text
-#
-#
-#     await FSM_reg.next()
-#     await message.answer('Отправьте свою фотографию')
-#
-#
-# async def load_photo(message: types.Message, state: FSMContext):
-#     async with state.proxy() as data:
-#         data['photo'] = message.photo[-1].file_id
-#
-#
-#     await FSM_reg.next()
-#     await message.answer('Верные ли данные')
-#     await message.answer_photo(photo=data['photo'],
-#                                caption=f'ФИО - {data["fullname"]}\n'
-#                                        f'Возраст - {data["age"]}\n'
-#                                        f'Пол - {data["gender"]}\n'
-#                                        f'Дата рождения - {data["date_age"]}\n'
-#                                        f'Почта - {data["email"]}\n')
-#
-# async def submit(message: types.Message, state: FSMContext):
-#     if message.text == 'да':
-#         async with state.proxy() as data:
-#             # Запись в базу
-#             await message.answer('Ваши данные в базе')
-#
-#         await state.finish()
-#
-#     elif message.text == 'нет':
-#         await message.answer('Хорошо, отменено!')
-#         await state.finish()
-#
-#     else:
-#         await message.answer('Выберите да или нет')
-#
-#
-# def register_handlers_fsm(dp: Dispatcher):
-#     dp.register_message_handler(start_fsm_reg, commands=['registration'])
-#     dp.register_message_handler(load_fullname, state=FSM_reg.fullname)
-#     dp.register_message_handler(load_age, state=FSM_reg.age)
-#
-#     dp.register_message_handler(load_gender, state=FSM_reg.gender)
-#     dp.register_message_handler(load_date_age, state=FSM_reg.date_age)
-#     dp.register_message_handler(load_email, state=FSM_reg.email)
-#     dp.register_message_handler(load_photo, state=FSM_reg.photo, content_types=['photo'])
-#     dp.register_message_handler(submit, state=FSM_reg.submit)
-
-
-class FSMProduct(StatesGroup):
-    name = State()
-    size = State()
-    category = State()
-    price = State()
+class FSM_reg(StatesGroup):
+    fullname = State()
+    age = State()
+    gender = State()
+    date_age = State()
+    email = State()
     photo = State()
     submit = State()
 
-async def start_fsm_product(message: types.Message):
-    await FSMProduct.name.set()
-    await message.answer('Введите название модели товара: ')
 
-async def load_name(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['name'] = message.text
-    await FSMProduct.next()
-    await message.answer('Введите размер товара: ')
+async def start_fsm_reg(message: types.Message):
+    await FSM_reg.fullname.set()
+    await message.answer('Введите своё фио: ', reply_markup=buttons.cancel_fsm)
 
-async def load_size(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['size'] = message.text
-    await FSMProduct.next()
-    await message.answer('Введите категорию товара: ')
 
-async def load_category(message: types.Message, state: FSMContext):
+async def load_fullname(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['category'] = message.text
-    await FSMProduct.next()
-    await message.answer('Введите стоимость товара: ')
+        data['fullname'] = message.text
 
-async def load_price(message: types.Message, state: FSMContext):
-    if not message.text.isdigit():
-        await message.answer('Пожалуйста, введите числовое значение для цены.')
-        return
+    await FSM_reg.next()
+    await message.answer('Отправь свой возраст')
+
+
+async def load_age(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['price'] = int(message.text)
-    await FSMProduct.next()
-    await message.answer('Загрузите фото товара: ')
+        data['age'] = message.text
+
+    await FSM_reg.next()
+    await message.answer('Укажите пол')
+
+
+
+async def load_gender(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['gender'] = message.text
+
+
+    await FSM_reg.next()
+    await message.answer('Укажите дату рождения:')
+
+
+async def load_date_age(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['date_age'] = message.text
+
+
+    await FSM_reg.next()
+    await message.answer('Укажите свою почту')
+
+
+async def load_email(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['email'] = message.text
+
+
+    await FSM_reg.next()
+    await message.answer('Отправьте свою фотографию')
+
 
 async def load_photo(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['photo'] = message.photo[-1].file_id
-    await FSMProduct.next()
-    await message.answer('Подтвердите добавление товара')
-    await message.answer_photo(photo=data['photo'],
-                               caption=f'Название: {data["name"]}\n'
-                                       f'Размер: {data["size"]}\n'
-                                       f'Категория: {data["category"]}\n'
-                                       f'Стоимость: {data["price"]} руб.\n')
 
-async def submit_product(message: types.Message, state: FSMContext):
-    if message.text.lower() == 'да':
+
+    await FSM_reg.next()
+    await message.answer('Верные ли данные')
+    await message.answer_photo(photo=data['photo'],
+                               caption=f'ФИО - {data["fullname"]}\n'
+                                       f'Возраст - {data["age"]}\n'
+                                       f'Пол - {data["gender"]}\n'
+                                       f'Дата рождения - {data["date_age"]}\n'
+                                       f'Почта - {data["email"]}\n', reply_markup=buttons.submit)
+
+async def submit(message: types.Message, state: FSMContext):
+    if message.text == 'да':
         async with state.proxy() as data:
-            # Запись в базу
-            await message.answer('Товар добавлен в базу.')
+
+            await main_db.sql_insert_registered(
+                fullname=data['fullname'],
+                age=data['age'],
+                gender=data['gender'],
+                date_age=data['date_age'],
+                email=data['email'],
+                photo=data['photo']
+            )
+
+            await message.answer('Ваши данные в базе', reply_markup=buttons.start)
+
         await state.finish()
-    elif message.text.lower() == 'нет':
-        await message.answer('Добавление товара отменено.')
+
+    elif message.text == 'нет':
+        await message.answer('Хорошо, отменено!', reply_markup=buttons.start)
         await state.finish()
+
     else:
-        await message.answer('Выберите "да" или "нет".')
+        await message.answer('Выберите да или нет')
+
+
+async def cancel_fsm(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+
+    if current_state is not None:
+        await state.finish()
+        await message.answer('Отменено!', reply_markup=buttons.start)
+
 
 def register_handlers_fsm(dp: Dispatcher):
-    dp.register_message_handler(start_fsm_product, commands=['add_product'])
-    dp.register_message_handler(load_name, state=FSMProduct.name)
-    dp.register_message_handler(load_size, state=FSMProduct.size)
-    dp.register_message_handler(load_category, state=FSMProduct.category)
-    dp.register_message_handler(load_price, state=FSMProduct.price)
-    dp.register_message_handler(load_photo, state=FSMProduct.photo, content_types=['photo'])
-    dp.register_message_handler(submit_product, state=FSMProduct.submit)
+    dp.register_message_handler(cancel_fsm, Text(equals='отмена', ignore_case=True), state='*')
+    dp.register_message_handler(start_fsm_reg, commands=['registration'])
+    dp.register_message_handler(load_fullname, state=FSM_reg.fullname)
+    dp.register_message_handler(load_age, state=FSM_reg.age)
+
+    dp.register_message_handler(load_gender, state=FSM_reg.gender)
+    dp.register_message_handler(load_date_age, state=FSM_reg.date_age)
+    dp.register_message_handler(load_email, state=FSM_reg.email)
+    dp.register_message_handler(load_photo, state=FSM_reg.photo, content_types=['photo'])
+    dp.register_message_handler(submit, state=FSM_reg.submit)
+
+
+# class FSMProduct(StatesGroup):
+#     name = State()
+#     size = State()
+#     category = State()
+#     price = State()
+#     photo = State()
+#     submit = State()
+#
+# async def start_fsm_product(message: types.Message):
+#     await FSMProduct.name.set()
+#     await message.answer('Введите название модели товара: ')
+#
+# async def load_name(message: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['name'] = message.text
+#     await FSMProduct.next()
+#     await message.answer('Введите размер товара: ')
+#
+# async def load_size(message: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['size'] = message.text
+#     await FSMProduct.next()
+#     await message.answer('Введите категорию товара: ')
+#
+# async def load_category(message: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['category'] = message.text
+#     await FSMProduct.next()
+#     await message.answer('Введите стоимость товара: ')
+#
+# async def load_price(message: types.Message, state: FSMContext):
+#     if not message.text.isdigit():
+#         await message.answer('Пожалуйста, введите числовое значение для цены.')
+#         return
+#     async with state.proxy() as data:
+#         data['price'] = int(message.text)
+#     await FSMProduct.next()
+#     await message.answer('Загрузите фото товара: ')
+#
+# async def load_photo(message: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['photo'] = message.photo[-1].file_id
+#     await FSMProduct.next()
+#     await message.answer('Подтвердите добавление товара')
+#     await message.answer_photo(photo=data['photo'],
+#                                caption=f'Название: {data["name"]}\n'
+#                                        f'Размер: {data["size"]}\n'
+#                                        f'Категория: {data["category"]}\n'
+#                                        f'Стоимость: {data["price"]} руб.\n')
+#
+# async def submit_product(message: types.Message, state: FSMContext):
+#     if message.text.lower() == 'да':
+#         async with state.proxy() as data:
+#             # Запись в базу
+#             await message.answer('Товар добавлен в базу.')
+#         await state.finish()
+#     elif message.text.lower() == 'нет':
+#         await message.answer('Добавление товара отменено.')
+#         await state.finish()
+#     else:
+#         await message.answer('Выберите "да" или "нет".')
+#
+# def register_handlers_fsm(dp: Dispatcher):
+#     dp.register_message_handler(start_fsm_product, commands=['add_product'])
+#     dp.register_message_handler(load_name, state=FSMProduct.name)
+#     dp.register_message_handler(load_size, state=FSMProduct.size)
+#     dp.register_message_handler(load_category, state=FSMProduct.category)
+#     dp.register_message_handler(load_price, state=FSMProduct.price)
+#     dp.register_message_handler(load_photo, state=FSMProduct.photo, content_types=['photo'])
+#     dp.register_message_handler(submit_product, state=FSMProduct.submit)
