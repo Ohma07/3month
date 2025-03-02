@@ -1,7 +1,6 @@
 # commands.py
 from aiogram import types, Dispatcher, executor
 from config import bot,dp
-import random
 import buttons
 
 
